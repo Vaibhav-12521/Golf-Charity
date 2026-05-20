@@ -1,3 +1,4 @@
+import { useId } from "react";
 import { cn } from "@/lib/utils";
 
 interface Props {
@@ -39,6 +40,13 @@ export function BrandLogo({ size = "md", iconOnly = false, inverted = false, cla
 }
 
 function BrandEmblem() {
+  // Unique IDs per instance — the dashboard renders mobile + desktop nav
+  // simultaneously (one hidden via CSS). Without unique IDs, both <BrandLogo/>
+  // instances share id="bc-bg", and some browsers fail to resolve `url(#bc-bg)`
+  // to a defs node living in a `display:none` subtree → second emblem invisible.
+  const reactId = useId().replace(/:/g, "");
+  const bgId = `bg-${reactId}`;
+  const dimpleId = `dimple-${reactId}`;
   return (
     <svg
       viewBox="0 0 64 64"
@@ -46,27 +54,27 @@ function BrandEmblem() {
       className="w-full h-full block"
     >
       <defs>
-        <linearGradient id="bc-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+        <linearGradient id={bgId} x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stopColor="#1f4d31" />
           <stop offset="55%" stopColor="#357d4d" />
           <stop offset="100%" stopColor="#d28e0c" />
         </linearGradient>
-        <radialGradient id="bc-dimple" cx="50%" cy="50%" r="50%">
+        <radialGradient id={dimpleId} cx="50%" cy="50%" r="50%">
           <stop offset="0%" stopColor="rgba(14,24,20,0.22)" />
           <stop offset="100%" stopColor="rgba(14,24,20,0)" />
         </radialGradient>
       </defs>
 
       {/* rounded square background */}
-      <rect width="64" height="64" rx="16" fill="url(#bc-bg)" />
+      <rect width="64" height="64" rx="16" fill={`url(#${bgId})`} />
 
       {/* golf ball */}
       <circle cx="22" cy="22" r="10" fill="#ffffff" />
-      <circle cx="19" cy="20" r="1.6" fill="url(#bc-dimple)" />
-      <circle cx="24" cy="19" r="1.6" fill="url(#bc-dimple)" />
-      <circle cx="22" cy="24" r="1.6" fill="url(#bc-dimple)" />
-      <circle cx="26" cy="24" r="1.6" fill="url(#bc-dimple)" />
-      <circle cx="19" cy="25" r="1.6" fill="url(#bc-dimple)" />
+      <circle cx="19" cy="20" r="1.6" fill={`url(#${dimpleId})`} />
+      <circle cx="24" cy="19" r="1.6" fill={`url(#${dimpleId})`} />
+      <circle cx="22" cy="24" r="1.6" fill={`url(#${dimpleId})`} />
+      <circle cx="26" cy="24" r="1.6" fill={`url(#${dimpleId})`} />
+      <circle cx="19" cy="25" r="1.6" fill={`url(#${dimpleId})`} />
 
       {/* heart overlapping the ball */}
       <path

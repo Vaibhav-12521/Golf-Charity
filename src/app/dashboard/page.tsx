@@ -500,15 +500,24 @@ function StatCard({
     muted: "from-ink-400 to-ink-300",
   }[tone];
   return (
-    <div className={`card p-4 ${delay || ""}`}>
-      <div className="flex items-center gap-2 text-xs uppercase font-semibold tracking-wider text-ink-400">
-        <span className="h-7 w-7 rounded-lg bg-ink-100 text-ink-600 flex items-center justify-center">
+    <div className={`card p-4 min-w-0 overflow-hidden ${delay || ""}`}>
+      <div className="flex items-center gap-2 text-xs uppercase font-semibold tracking-wider text-ink-400 min-w-0">
+        <span className="h-7 w-7 rounded-lg bg-ink-100 text-ink-600 flex items-center justify-center shrink-0">
           {icon}
         </span>
-        {label}
+        <span className="truncate">{label}</span>
       </div>
-      <div className="mt-2 text-2xl font-display font-bold tabular-nums">{value}</div>
-      {sub && <div className="mt-0.5 text-xs text-ink-500">{sub}</div>}
+      <div
+        className="mt-2 font-display font-bold tabular-nums text-xl sm:text-2xl truncate"
+        title={value}
+      >
+        {value}
+      </div>
+      {sub && (
+        <div className="mt-0.5 text-xs text-ink-500 truncate" title={sub}>
+          {sub}
+        </div>
+      )}
       {typeof progress === "number" && (
         <div className="mt-3 h-1.5 rounded-full bg-ink-100 overflow-hidden">
           <div
