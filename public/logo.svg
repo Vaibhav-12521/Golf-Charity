@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Birdie & Cause">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1f4d31"/>
+      <stop offset="55%" stop-color="#357d4d"/>
+      <stop offset="100%" stop-color="#d28e0c"/>
+    </linearGradient>
+    <radialGradient id="dimple" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="rgba(14,24,20,0.22)"/>
+      <stop offset="100%" stop-color="rgba(14,24,20,0)"/>
+    </radialGradient>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="url(#bg)"/>
+  <circle cx="22" cy="22" r="10" fill="#ffffff"/>
+  <circle cx="19" cy="20" r="1.7" fill="url(#dimple)"/>
+  <circle cx="24" cy="19" r="1.7" fill="url(#dimple)"/>
+  <circle cx="22" cy="24" r="1.7" fill="url(#dimple)"/>
+  <circle cx="26" cy="24" r="1.7" fill="url(#dimple)"/>
+  <circle cx="19" cy="25" r="1.7" fill="url(#dimple)"/>
+  <path d="M40 50 C 25 41, 24 30, 32 28 C 35 27, 38 29, 40 32 C 42 29, 45 27, 48 28 C 56 30, 55 41, 40 50 Z"
+        fill="#ffffff" opacity="0.97"/>
+  <rect x="31" y="32" width="2" height="6" rx="1" fill="#ffffff" opacity="0.65"/>
+</svg>

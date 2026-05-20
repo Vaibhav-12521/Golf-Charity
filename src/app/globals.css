@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #fbfaf6;
+  --ink: #0f152b;
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  ::selection {
+    background: theme("colors.brand.500");
+    color: white;
+  }
+}
+
+@layer components {
+  .container-narrow {
+    @apply mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 2xl:max-w-[1280px];
+  }
+  .container-wide {
+    @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 2xl:max-w-[1440px];
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400 disabled:opacity-50 disabled:pointer-events-none;
+  }
+  .btn-primary {
+    @apply btn bg-ink-900 text-white hover:bg-ink-800 shadow-card;
+  }
+  .btn-brand {
+    @apply btn bg-brand-500 text-white hover:bg-brand-600 shadow-glow;
+  }
+  .btn-outline {
+    @apply btn border border-ink-200 bg-white text-ink-900 hover:bg-ink-50;
+  }
+  .btn-ghost {
+    @apply btn text-ink-700 hover:bg-ink-100;
+  }
+  .field {
+    @apply w-full rounded-xl border border-ink-200 bg-white px-4 py-2.5 text-sm shadow-sm placeholder:text-ink-400 focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-200;
+  }
+  .card {
+    @apply rounded-2xl bg-white shadow-card border border-ink-100;
+  }
+  .badge {
+    @apply inline-flex items-center gap-1 rounded-full bg-ink-100 px-2.5 py-0.5 text-xs font-medium text-ink-700;
+  }
+  .badge-green {
+    @apply badge bg-accent-100 text-accent-700;
+  }
+  .badge-amber {
+    @apply badge bg-amber-100 text-amber-700;
+  }
+  .badge-red {
+    @apply badge bg-red-100 text-red-700;
+  }
+  .badge-brand {
+    @apply badge bg-brand-100 text-brand-700;
+  }
+}
+
+/* subtle animated gradient used in hero */
+.hero-orb {
+  background: radial-gradient(circle at 30% 30%, rgba(53, 125, 77, 0.55), transparent 60%),
+              radial-gradient(circle at 70% 70%, rgba(210, 142, 12, 0.40), transparent 60%);
+  filter: blur(80px);
+}
