@@ -4,13 +4,17 @@ import { createClient } from "@/lib/supabase/server";
 import { formatCents, formatDate } from "@/lib/utils";
 import { isSubscriptionActive } from "@/lib/types";
 import { SubscriptionActions } from "./actions";
+import { AlertTriangle } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
 export default async function SubscriptionPage({
   searchParams,
 }: {
-  searchParams: { success?: string; canceled?: string };
+  // `success=1`  → return from successful Stripe Checkout
+  // `canceled=1` → return from abandoned Stripe Checkout
+  // `refresh=1`  → return from Stripe Customer Portal (cancel/upgrade/etc)
+  searchParams: { success?: string; canceled?: string; refresh?: string };
 }) {
   const session = await getSessionUser();
   if (!session) redirect("/login");
@@ -32,6 +36,7 @@ export default async function SubscriptionPage({
     .limit(12);
 
   const active = isSubscriptionActive(sub);
+  const willCancel = active && sub?.cancel_at_period_end === true;
 
   return (
     <div className="space-y-6">
@@ -47,15 +52,50 @@ export default async function SubscriptionPage({
         <div className="card p-4 bg-amber-50 text-amber-900 text-sm">Checkout canceled. You can try again any time.</div>
       )}
 
+      {willCancel && (
+        <div className="card p-5 bg-amber-50 border-amber-200">
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="h-5 w-5 text-amber-700 mt-0.5 shrink-0" />
+            <div>
+              <div className="font-semibold text-amber-900">
+                Your subscription is scheduled to cancel.
+              </div>
+              <p className="text-sm text-amber-800 mt-1">
+                You&rsquo;ll keep access until{" "}
+                <strong>{formatDate(sub?.current_period_end)}</strong>.
+                After that, you won&rsquo;t be entered in the monthly draw and your
+                charity contributions stop. Resume any time before then via{" "}
+                <strong>Manage billing</strong> below.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="card p-6">
         <div className="flex items-center justify-between flex-wrap gap-3">
           <div>
             <div className="text-xs uppercase tracking-wider text-ink-400">Current plan</div>
             <div className="font-display text-2xl font-bold mt-1 capitalize">{sub?.plan || "—"}</div>
             <div className="text-sm text-ink-500 mt-1">
-              Status: <span className={`font-semibold ${active ? "text-accent-700" : "text-ink-700"}`}>{sub?.status || "none"}</span>
-              {sub?.current_period_end ? <> · renews {formatDate(sub.current_period_end)}</> : null}
-              {sub?.cancel_at_period_end ? <> · cancels at period end</> : null}
+              Status:{" "}
+              <span
+                className={`font-semibold ${
+                  willCancel
+                    ? "text-amber-700"
+                    : active
+                      ? "text-accent-700"
+                      : "text-ink-700"
+                }`}
+              >
+                {willCancel ? "Active — canceling" : sub?.status || "none"}
+              </span>
+              {sub?.current_period_end && (
+                <>
+                  {" · "}
+                  {willCancel ? "ends" : "renews"} {formatDate(sub.current_period_end)}
+                </>
+              )}
             </div>
           </div>
           <div className="text-right">
@@ -68,7 +108,11 @@ export default async function SubscriptionPage({
           <SubscriptionActions
             hasSub={!!sub}
             active={active}
-            autoSync={searchParams.success === "1"}
+            // Auto-sync if returning from EITHER checkout success OR the
+            // Stripe Customer Portal (cancel/plan-change/payment-method).
+            autoSync={
+              searchParams.success === "1" || searchParams.refresh === "1"
+            }
           />
         </div>
       </div>

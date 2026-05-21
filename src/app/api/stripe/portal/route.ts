@@ -22,9 +22,13 @@ export async function POST(req: NextRequest) {
 
     const stripe = getStripe();
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || new URL(req.url).origin;
+    // `?refresh=1` triggers the subscription page's auto-sync so cancellations
+    // / plan changes / payment-method updates show immediately on return —
+    // critical when the live webhook isn't yet wired (no STRIPE_WEBHOOK_SECRET
+    // in Vercel) and the dashboard would otherwise show stale state.
     const portal = await stripe.billingPortal.sessions.create({
       customer: profile.stripe_customer_id,
-      return_url: `${appUrl}/dashboard/subscription`,
+      return_url: `${appUrl}/dashboard/subscription?refresh=1`,
     });
     return NextResponse.json({ url: portal.url });
   } catch (e: unknown) {

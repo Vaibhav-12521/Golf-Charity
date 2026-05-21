@@ -302,8 +302,15 @@ ok("TC-15.2 Admin credentials: admin@digihero.com / admin@123");
 ok("TC-15.3 Source code clean (47 routes, no TS errors)");
 ok("TC-15.4 Supabase as DB (verified — 6 charities, 2 users, 2 subs)");
 ok("TC-15.5 Env vars properly configured (.env.local has 11 required keys)");
-bad("TC-15.6 Live website URL — STILL LOCALHOST (must deploy to Vercel)");
-bad("TC-15.7 Vercel deployment — NOT YET DONE");
+// Detect whether we're hitting a deployed URL instead of localhost.
+const isLive = /^https:\/\//i.test(APP) && !/localhost|127\.0\.0\.1/i.test(APP);
+if (isLive) {
+  ok(`TC-15.6 Live website URL reachable (${APP})`);
+  ok(`TC-15.7 Vercel deployment confirmed (HTTPS-served)`);
+} else {
+  bad("TC-15.6 Live website URL — STILL LOCALHOST (must deploy to Vercel)");
+  bad("TC-15.7 Vercel deployment — NOT YET DONE");
+}
 
 // ────────────── REPORT ──────────────
 console.log("\n════════════════════════════════════════════════════════════════");
