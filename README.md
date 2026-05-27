@@ -6,7 +6,7 @@ Digital Heroes PRD as a full-stack trainee selection submission.
 
 > Play a round. Change a life.
 
----
+--- 
 
 ## Stack
 
