@@ -4,7 +4,6 @@
 --
 --   Email:    admin@digihero.com
 --   Password: admin@123
---
 -- Idempotent — safe to re-run; it skips creation if the user already exists.
 -- =====================================================================
 
