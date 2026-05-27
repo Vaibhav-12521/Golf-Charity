@@ -5,7 +5,6 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Sophisticated dark navy — the "Birdie & Cause" canvas.
         ink: {
           50: "#f5f7f5",
           100: "#e8ede9",
